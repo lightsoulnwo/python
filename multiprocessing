@@ -1,0 +1,79 @@
+import time
+import numpy 
+import random
+from multiprocessing import Pool
+from itertools import repeat
+filas=input("ingrese numero de filas :")
+columnas=input("ingrese numero de columnas :")
+filas=int(filas)
+columnas=int(columnas)
+"""
+Complete aqui la funcion que multiplica 2 vectores
+Entradas: los 2 vectores
+Salidas: El producto de la multiplicacion(numero entero)
+"""
+def matrizxvector(matriz,vector):
+    acumulador=0
+    suma=[]
+    for i in range(filas):
+        for j in range(columnas):
+            acumulador+=matriz[i][j]*vector[j]
+        suma.append(acumulador)
+        acumulador=0
+    return suma
+def multiplica_vectorxvector(vectorA,vectorB):
+    resultado=[]
+    acumulador=0
+    for i in range(columnas):
+        acumulador+=vectorA[i]*vectorB[i]
+        
+
+    return acumulador
+
+if __name__ == '__main__':
+    resultado=[]
+    resultado_2=[]
+    mula=[]
+    #Llenamos la matriz y el vector con valores aleatorios
+    """
+    Complete:
+    -La matriz M debe ser de 5000x10000 y su valores sean 0-100
+    -El vector A debe ser de 10000x1 y sus valores deben estar entre 0-100
+    """
+    matrix_M = numpy.random.randint(5 , size=(filas,columnas)) 
+    vector_A = numpy.random.randint(5 , size=(filas)) 
+    print(matrix_M)
+    print(vector_A)
+    #Hacemos multiplicacion en serial y medimos el tiempo de ejeccuion
+    start = time.time()
+
+    for i in range(filas):
+
+        mula=multiplica_vectorxvector(matrix_M[:][i],vector_A)
+ 
+        resultado.append(mula)
+    end = time.time()
+    
+
+    print("Tiempo de ejecucion en serial: ", (end-start))
+    print(resultado)
+   
+    #Hacemos multiplicacion en paralelo y medimos el tiempo de ejecucion
+    joined_vector = zip(matrix_M, repeat(vector_A))	#joined_vector va a ser la entrada a starmap(ver guia teorica)
+    
+    start=time.time()
+    p = Pool()
+    resultado_2=p.starmap(multiplica_vectorxvector,joined_vector)
+    p.close()
+    p.join()
+    end=time.time() 
+    
+
+    print("Tiempo de ejecucion en paralelo: ......" ,(end-start))
+    
+    print(resultado_2)
+    """Descomente esta linea y ponga sus vectores resultantes.
+    assert() permite determinar si el resultado de su operación en serial 
+    y paralelo fueron iguales
+    """
+    #assert(result_serial == result_paralelo) 
