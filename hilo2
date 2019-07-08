@@ -1,0 +1,100 @@
+
+import requests
+import threading
+import time
+
+def sinthread():
+	
+	req1=requests.get("http://dev.ecm.energyatech.com:5000/maravillas/imagen1")
+	req2=requests.get("http://dev.ecm.energyatech.com:5000/maravillas/imagen2")
+	req3=requests.get("http://dev.ecm.energyatech.com:5000/maravillas/imagen3")
+	req4=requests.get("http://dev.ecm.energyatech.com:5000/maravillas/imagen4")
+	req5=requests.get("http://dev.ecm.energyatech.com:5000/maravillas/imagen5")
+	req6=requests.get("http://dev.ecm.energyatech.com:5000/maravillas/imagen6")
+	req7=requests.get("http://dev.ecm.energyatech.com:5000/maravillas/imagen7")
+
+	imagen1=open("imagen_1.jpg","wb")
+	imagen2=open("imagen_2.jpg","wb")
+	imagen3=open("imagen_3.jpg","wb")
+	imagen4=open("imagen_4.jpg","wb")
+	imagen5=open("imagen_5.jpg","wb")
+	imagen6=open("imagen_6.jpg","wb")
+	imagen7=open("imagen_7.jpg","wb")
+
+	imagen1.write(req1.content)
+	imagen2.write(req2.content)
+	imagen3.write(req3.content)
+	imagen4.write(req4.content)
+	imagen5.write(req5.content)
+	imagen6.write(req6.content)
+
+	imagen7.write(req7.content)
+	
+	imagen1.close()
+	imagen2.close()
+	imagen3.close()
+	imagen4.close()
+	imagen5.close()
+	imagen6.close()
+	imagen7.close()
+
+
+def conthread(n,m):
+	m=m+1
+	req=[0]*m
+	image=[0]*m
+	
+	for i in range(n,m):
+		req[i]=requests.get("http://dev.ecm.energyatech.com:5000/maravillas/imagen"+str(i))
+		image[i]=open("imagen_"+str(i),"wb")
+		image[i].write(req[i].content)
+		image[i].close()
+
+if __name__ == '__main__':
+	speed=0
+	start=time.time()
+	sinthread()
+	end=time.time()
+	speed=end-start
+	print("el tiempo sin hilos en paralelo es:",(end-start))
+	start=time.time()
+	hilo1=threading.Thread(target=conthread,args=(1,3))
+	hilo2=threading.Thread(target=conthread,args=(4,7))
+	
+	hilo1.start()
+	hilo2.start()
+	hilo1.join()
+	hilo1.join()
+	end=time.time()
+	print("el tiempo con 2 hilos en paralelo es:",(end-start))
+	print("speed up 0",(speed/(end-start)))
+	start=start=time.time()
+
+	hilo3=threading.Thread(target=conthread,args=(1,1))
+	hilo4=threading.Thread(target=conthread,args=(2,2))
+	hilo5=threading.Thread(target=conthread,args=(3,3))
+	hilo6=threading.Thread(target=conthread,args=(4,4))
+	hilo7=threading.Thread(target=conthread,args=(5,5))
+	hilo8=threading.Thread(target=conthread,args=(6,6))
+	hilo9=threading.Thread(target=conthread,args=(7,7))
+
+	hilo3.start()
+	hilo4.start()
+	hilo5.start()
+	hilo6.start()
+	hilo7.start()
+	hilo8.start()
+	hilo9.start()
+
+	
+	hilo3.join()
+	hilo4.join()
+	hilo5.join()
+	hilo6.join()
+	hilo7.join()
+	hilo8.join()
+	hilo9.join()
+	end=time.time()
+
+	print("el tiempo con 7 hilos en paralelo es:",(end-start))
+	print("speed up",(speed/(end-start)))
