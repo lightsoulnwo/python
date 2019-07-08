@@ -1,0 +1,32 @@
+
+import matplotlib.pyplot as plt
+import matplotlib.image as ima  
+import numpy as num
+#leer imagenes
+
+
+archivo=ima.imread("imagen2.jpg")#el metodo lo escala entre 0 y 1y esto para png ,para jpg y jpeg esta entre 0 y 255
+[a,b,c]=archivo.shape
+archivo0=archivo[:,:,2]#con el 0 al ultimo idncio en que capa voy a estar :v
+print(archivo0.max())
+
+histograma=[0]*256
+for i in range(a):
+	for j in range(b):
+		index=int(archivo0[i,j])			
+		histograma[index]+=1
+
+indice=num.arange(len(histograma))
+plt.bar(indice,histograma)
+plt.show()
+
+#print(histograma)
+
+
+	
+print(a)
+print(b)
+print(c)
+#plt.imshow(archivo)
+
+#plt.show()
