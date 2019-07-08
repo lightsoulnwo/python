@@ -1,0 +1,35 @@
+import numpy as np 
+
+
+matriz=np.random.randint(5,size=(3,3))
+vector=np.random.randint(5,size=3)
+matriz=np.matrix(matriz)
+acumulador=0
+suma=[]
+
+code=open("codigo.txt","ad")
+with open("matriz.txt","wb") as fp:
+	for line in matriz:
+		np.savetxt(fp,line,fmt="%0.f")
+
+with open("vector.txt","wb")as vec:
+
+	np.savetxt(vec,vector,fmt="%0.f")
+
+
+vectors=np.loadtxt("vector.txt")
+matrix = np.loadtxt('matriz.txt', usecols=range(3))
+
+for i in range(len(vector)):
+	for j in range(len(vector)):
+		acumulador+=matrix[i][j]*vectors[j]
+		
+	suma.append(acumulador)
+	acumulador=0
+
+
+
+print(vectors)
+print(matriz)
+with open("resultado.txt","a") as res:
+	np.savetxt(res,suma,fmt="%0.f")
