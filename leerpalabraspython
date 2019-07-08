@@ -1,0 +1,37 @@
+import datetime
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.image as ima 
+filepath = 'Iliad.txt'
+list1=[]
+c=1000
+a=0
+dict2={}
+with open(filepath) as fp: #se abre lo que hay en filepath y de define como fp
+	dict1={}
+
+	for line in fp:
+		line = line.split()
+		print(line)
+		for i in range(len(line)):
+			if line[i] in dict1:
+				dict1[line[i]]+=1
+			else:
+				dict1[line[i]]=1
+	
+
+
+for i in dict1:
+	if c<dict1[i]:
+		dict2[i]=dict1[i]
+		a+=1
+	if a>10	:
+		print(dict1[i])
+		print(a)
+		break
+
+indice=np.arange(len(dict2.keys()))
+plt.bar(dict2.keys(),dict2.values())
+plt.show()
+
+print(dict2)
