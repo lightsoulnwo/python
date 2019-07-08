@@ -1,0 +1,63 @@
+
+import random
+import threading
+import time
+filas=input("ingrese las filas:")
+columnas=input("ingrese las columnas:")
+resultado_serial=[0]*filas
+resultado_paralelo=[]
+
+def multiplicacionM(vector,matriz):
+	
+	mula=0
+	for i in range(filas):
+		mula=0
+		for j in range(columnas):
+			mula+=matriz[i][j]*vector[j]
+		resultado_serial[i]=mula
+	print(vector)
+	print(matriz)
+	print(resultado_serial)
+
+
+def multiplicacionM_tread(vector,matriz):
+	mulaThread=[]
+	mula=0
+	for i in range(filas):
+		mula=0
+		mulaThread=[]
+		for j in range(columnas):
+			mulaThread.append(matriz[i][j])
+
+		hilo1=threading.Thread(target=multiplicacionVectores,args=(mulaThread,vector))
+		hilo1.start()
+		hilo1.join()
+
+
+		resultado_serial[i]=resultado_paralelo[i]
+
+	
+def multiplicacionVectores(vectorA,vectorB):
+	mula=0
+	for i in range(columnas):
+		mula+=(vectorA[i]*vectorB[i])
+	resultado_paralelo.append(mula)
+
+
+if __name__ == '__main__':
+	
+
+
+	vector=[random.randint(0 , 10) for i in range(filas) ]
+	matriz=[[random.randint(0 , 10)for i in range(columnas)]for i in range(filas)]
+	start=time.time()
+	multiplicacionM(vector,matriz)
+	end=time.time()
+	print("tiempo sin hilos para 5000",(end-start))
+	start=time.time()
+	multiplicacionM_tread(vector,matriz)
+	end=time.time()
+	print("TIEMPO CON HILOS PARA 5000:" ,(end-start))
+	print(resultado_serial)
+	print(vector)
+	print(matriz)
